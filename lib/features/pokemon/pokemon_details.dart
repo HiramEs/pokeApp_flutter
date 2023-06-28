@@ -48,8 +48,8 @@ class _PokemonDetailsState extends State<PokemonDetails> {
         child: pokemon?.name != null
             ? Column(
                 children: [
-                  const Spacer(
-                    flex: 1,
+                  const SizedBox(
+                    height: 20,
                   ),
                   Text(
                     pokemon!.name.toUpperCase(),
@@ -87,11 +87,8 @@ class _PokemonDetailsState extends State<PokemonDetails> {
                                 ),
                               ),
                             )),
-                  const Center(
-                    child: Text('Moves', style: TextStyle(fontSize: 20)),
-                  ),
-                  SizedBox(
-                    height: 400,
+                  const Text('Moves', style: TextStyle(fontSize: 20)),
+                  Expanded(
                     child: ListView.builder(
                       itemCount: pokemon!.moves.length,
                       itemBuilder: (context, index) {
