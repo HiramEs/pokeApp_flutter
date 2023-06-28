@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poke_app_flutter/features/pokedex/pokedex.dart';
 import 'package:poke_app_flutter/features/pokedex/pokedex_repository.dart';
-import 'package:poke_app_flutter/features/pokemon/pokemon.dart';
 
 final pokedexServiceProvider = Provider<PokedexService>((ref) {
   final pokedexRepository = ref.watch(pokedexRepositoryProvider);
@@ -10,7 +9,6 @@ final pokedexServiceProvider = Provider<PokedexService>((ref) {
 
 abstract class PokedexService {
   Future<List<PokedexEntry>> getPokedexEntries();
-  Future<Pokemon> getPokemon(String name);
 }
 
 class SetPokedexService implements PokedexService {
@@ -23,13 +21,5 @@ class SetPokedexService implements PokedexService {
     final pokedexEntries =
         pokedexEntryEntities.map((e) => PokedexEntry.fromEntity(e)).toList();
     return pokedexEntries;
-  }
-
-  @override
-  Future<Pokemon> getPokemon(String name) async {
-    final pokemonEntity = await _pokedexRepository.getPokemon(name);
-    final pokemon = Pokemon.fromEntity(pokemonEntity);
-
-    return pokemon;
   }
 }

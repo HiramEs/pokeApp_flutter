@@ -1,14 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poke_app_flutter/features/pokedex/pokedex_service.dart';
 import 'package:poke_app_flutter/features/pokedex/pokedex_state.dart';
-import 'package:poke_app_flutter/features/pokemon/pokemon.dart';
 
 final pokedexControllerProvider =
     StateNotifierProvider.autoDispose<PokedexController, PokedexState>((ref) {
   return PokedexController(
       const PokedexState(
         pokedex: AsyncValue.data([]),
-        pokemon: AsyncValue.data(Pokemon.initial()),
       ),
       ref.watch(pokedexServiceProvider));
 });
@@ -27,10 +25,16 @@ class PokedexController extends StateNotifier<PokedexState> {
     state = state.copyWith(pokedex: AsyncValue.data(result));
   }
 
-  Future<void> getPokemon(String name) async {
-    state = state.copyWith(pokemon: const AsyncValue.loading());
-    final result = await _pokedexService.getPokemon(name);
+  void searchPokemon(String name) {
+    final results = state.pokedex.asData?.value.where((poke) {
+      final pokeName = poke.name.toLowerCase();
+      final query = name.toLowerCase();
 
-    state = state.copyWith(pokemon: AsyncValue.data(result));
+      return pokeName.contains(query);
+    }).toList();
+
+    if (results != null) {
+      state = state.copyWith(pokedex: AsyncValue.data(results));
+    }
   }
 }

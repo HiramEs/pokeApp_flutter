@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:poke_app_flutter/features/pokemon/pokemon_entity.dart';
 
 @immutable
 class Pokemon {
   final int id;
   final String name;
   final Sprites sprites;
+  final List<Move> moves;
 
-  const Pokemon({required this.id, required this.name, required this.sprites});
+  const Pokemon(
+      {required this.id,
+      required this.name,
+      required this.sprites,
+      required this.moves});
 
   const Pokemon.initial()
       : id = 0,
         name = '',
-        sprites = const Sprites(backDefault: '', frontDefault: '');
-
-  factory Pokemon.fromEntity(PokemonEntity entity) {
-    return Pokemon(id: entity.id, name: entity.name, sprites: entity.sprites);
-  }
+        sprites = const Sprites(back_default: '', front_default: ''),
+        moves = const [Move(move: Species(name: '', url: ''))];
 
   @override
-  String toString() => 'Pokemon(id: $id), name: $name, sprites$sprites)';
+  String toString() =>
+      'Pokemon(id: $id), name: $name, sprites$sprites, moves:$moves)';
 
   @override
   bool operator ==(Object other) {
@@ -28,36 +30,58 @@ class Pokemon {
     return other is Pokemon &&
         other.id == id &&
         other.name == name &&
-        other.sprites == sprites;
+        other.sprites == sprites &&
+        other.moves == moves;
   }
 
   @override
-  int get hashCode => name.hashCode ^ id.hashCode ^ sprites.hashCode;
+  int get hashCode =>
+      name.hashCode ^ id.hashCode ^ sprites.hashCode ^ moves.hashCode;
 }
 
 @immutable
 class Sprites {
-  final String backDefault;
-  final String frontDefault;
+  final String back_default;
+  final String front_default;
 
   const Sprites({
-    required this.backDefault,
-    required this.frontDefault,
+    required this.back_default,
+    required this.front_default,
   });
 
   @override
   String toString() =>
-      'Sprites(backDefault: $backDefault, frontDefault: $frontDefault)';
+      'Sprites(backDefault: $back_default, frontDefault: $front_default)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is Sprites &&
-        other.frontDefault == frontDefault &&
-        other.backDefault == backDefault;
+        other.front_default == front_default &&
+        other.back_default == back_default;
   }
 
   @override
-  int get hashCode => backDefault.hashCode ^ frontDefault.hashCode;
+  int get hashCode => back_default.hashCode ^ front_default.hashCode;
+}
+
+@immutable
+class Species {
+  final String name;
+  final String url;
+
+  const Species({
+    required this.name,
+    required this.url,
+  });
+}
+
+@immutable
+class Move {
+  final Species move;
+
+  const Move({
+    required this.move,
+  });
 }

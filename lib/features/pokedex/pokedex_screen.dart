@@ -14,45 +14,65 @@ class Pokedex extends ConsumerWidget {
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: const Text('Pokedex'),
           backgroundColor: Palette.pokeRed,
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search),
+          title: Container(
+            width: double.infinity,
+            height: 40.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
             ),
-          ],
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(10.0),
+            child: Center(
+              child: TextField(
+                onChanged: (value) {
+                  if (value != '') {
+                    ref
+                        .watch(pokedexControllerProvider.notifier)
+                        .searchPokemon(value);
+                  } else {
+                    ref.watch(pokedexControllerProvider.notifier).loadPokedex();
+                  }
+                },
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    hintText: "Search ...",
+                    prefixIconColor: Palette.pokeRed,
+                    suffixIconColor: Palette.pokeRed,
+                    border: InputBorder.none),
+              ),
             ),
           ),
         ),
         body: ref.watch(pokedexControllerProvider).pokedex.when(
               data: (pokedex) {
                 if (pokedex.isEmpty) {
-                  return const Text('Fail');
+                  return const Center(
+                      child: Text(
+                    'No Pokemon',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                    ),
+                  ));
                 }
 
                 return ListView.builder(
                   itemCount: pokedex.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(pokedex[index].name),
-                      leading: Text((index + 1).toString()),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                      onTap: () async {
-                        await ref
-                            .watch(pokedexControllerProvider.notifier)
-                            .getPokemon(pokedex[index].name);
-                        // ignore: use_build_context_synchronously
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PokemonDetails()));
-                      },
-                    );
+                        title: Text(pokedex[index].name),
+                        leading: Text((index + 1).toString()),
+                        trailing: const Icon(Icons.arrow_forward_ios),
+                        onTap: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PokemonDetails(
+                                  pokemonName:
+                                      pokedex[index].name.toUpperCase(),
+                                  url: pokedex[index].url,
+                                ),
+                              ));
+                        });
                   },
                 );
               },
