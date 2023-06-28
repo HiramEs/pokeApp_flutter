@@ -60,7 +60,10 @@ class Pokedex extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     return ListTile(
                         title: Text(pokedex[index].name),
-                        leading: Text((index + 1).toString()),
+                        leading: Text((pokedex[index]
+                            .url
+                            .split('https://pokeapi.co/api/v2/pokemon/')[1]
+                            .replaceAll('/', ''))),
                         trailing: const Icon(Icons.arrow_forward_ios),
                         onTap: () async {
                           Navigator.push(
