@@ -1,10 +1,8 @@
-# poke_app_flutter
+# Pokemon App
+## Flutter pokemon app
 
-Pokemon app in flutter.
+Pokemon app using Flutter and PokeApi.
 
-## Install
-
-To run this project you need the following:
-
-- [Follow flutter setup]([https://docs.flutter.dev/get-started/codelab](https://docs.flutter.dev/get-started/install/macos))
-- [Run flutter pub get]
+To run this project you need:
+- Install flutter -> Follow the [flutter documentation](https://breakdance.github.io/breakdance/)
+- Run ```flutter pub get```
