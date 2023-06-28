@@ -8,7 +8,6 @@ class PokemonService {
     final response = await dio.get(url);
     if (response.statusCode == 200) {
       final result = response.data;
-      print(result['moves']);
       return Pokemon(
         id: result['id'],
         name: result['name'],
